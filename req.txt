@@ -1,0 +1,133 @@
+project description 
+
+Natural Language Task Manager (Enterprise-Grade To-Do List)
+Objective:
+Build a Web App that lets a user add natural language tasks like:
+“Finish landing page Aman by 11pm 20th June”
+“Call client Rajeev tomorrow 5pm”
+Functionality Requirements:
+Extract:
+Task Name (e.g., “Finish landing page”)
+Assignee (e.g., “Aman”)
+Due Date & Time (e.g., “11pm 20th June”)
+Default priority P3 unless specified as P1, P2, or P4
+Display the parsed task in a beautiful UI task board/list.
+Example Output:
+Task	Assigned To	Due Date/Time	Priority
+Finish landing page	Aman	11:00 PM, 20 June	P3
+feature:
+Allow editing of the parsed task directly in the UI. 
+
+
+
+
+
+🧠 Project Blueprint: Natural Language Task Manager
+🧱 1. 🔧 Core Working Logic (Behind the App)
+When a user types:
+
+“Finish landing page Aman by 11pm 20th June”
+
+Your app should:
+
+🧾 Send the text to OpenAI for extraction (task, assignee, date, priority).
+
+🧠 Parse the AI response into structured data.
+
+💾 Store that structured task in your state/database.
+
+🖼️ Render the task on a Kanban board or task list.
+
+✏️ Allow editing the task inline (title, assignee, due date, priority).
+
+🔁 Example Flow
+pgsql
+Copy
+Edit
+User types sentence → OpenAI → Parses to structured task → Saved in state → Rendered in task list → Editable
+🗂️ Data Structure
+ts
+Copy
+Edit
+type Task = {
+  id: string;
+  description: string;
+  assignee: string;
+  dueDate: string;
+  priority: 'P1' | 'P2' | 'P3' | 'P4';
+};
+⚙️ Technology Stack
+Layer	Technology
+Frontend	Next.js (App Router) + Tailwind + shadcn
+Backend	Serverless API ( Node.js Express )
+Parsing	OpenAI GPT-3.5 
+Styling	Tailwind CSS + Shadcn/ui
+State Mgmt	 useState/useReducer
+Date Utils	date-fns 
+ DB	 LocalStorage
+
+📈 Development Phases
+🔹 Phase 1: Project Setup
+ Scaffold app using Next.js + Tailwind CSS
+
+ Set up routing and a basic home layout
+
+ Create .env.local and hide OpenAI key
+
+ Setup OpenAI server function (/api/parse-task)
+
+ Use Vercel serverless function to securely handle OpenAI calls
+
+🔹 Phase 2: Task Input & AI Integration
+ Create input form to accept natural language
+
+ On submit, send input to backend (/api/parse-task)
+
+ Server calls OpenAI and returns structured task data
+
+ Validate task structure using zod
+
+ Store task in local useState 
+
+🔹 Phase 3: Task List UI
+ Create a responsive task list/grid with Tailwind
+
+ Display tasks with columns: Task | Assigned To | Due Date | Priority
+
+ Assign color badges to priorities (P1 → red, P3 → gray)
+
+ Show readable date formats using date-fns
+
+🔹 Phase 4: Editing UI
+ Make task fields editable inline (on click)
+
+ Use controlled components (<input>, <select>)
+
+ On edit, update state immediately (optional: debounce)
+
+ Optional: Add "Save" / "Cancel" buttons per row
+
+
+
+🔹 Phase 5:  Features
+ Priority auto-detection from text ("urgent" → P1)
+
+ Due date parsing from natural language
+
+ Dark mode toggle
+
+ Export tasks as CSV
+
+ PWA support
+
+📋 Example UI Sketch
+
++---------------------------------------------------------+
+| [ Type a task... ]  [Add Task]                          |
++---------------------------------------------------------+
+| Task                  | Assignee | Due Date     | P.    |
+|-----------------------|----------|--------------|-------|
+| Finish landing page   | Aman     | 20 Jun, 11pm | P3 🔵 |
+| Call client Rajeev    | Rajeev   | Tomorrow 5pm | P2 🟡 |
++---------------------------------------------------------+
+
