@@ -4,53 +4,23 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { OpenAI } from 'openai';
 import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-//import { config } from '';
+import { dirname } from 'path';
+
 // Get current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-console.log("port"+process.env.PORT);
-// Load environment variables - try multiple possible paths
-const envPaths = [
-  resolve(__dirname, '../.env'),
-  resolve(__dirname, '../../.env'),
-  resolve(process.cwd(), '.env'),
-];
 
-let envLoaded = false;
-for (const path of envPaths) {
-  const result = dotenv.config({ path });
-  if (!result.error) {
-    envLoaded = true;
-    console.log('Loaded .env from:', path);
-    break;
-  }
-}
-
-if (!envLoaded) {
-  console.error('Failed to load .env file. Tried paths:', envPaths);
-}
-
-// Debug logging
-console.log('Environment check:', {
-  OPENAI_API_KEY_EXISTS: !!process.env.OPENAI_API_KEY,
-  OPENAI_API_KEY_LENGTH: process.env.OPENAI_API_KEY?.length,
-  OPENAI_API_KEY_PREFIX: process.env.OPENAI_API_KEY?.substring(0, 3),
-  CWD: process.cwd(),
-  NODE_ENV: process.env.NODE_ENV
-});
-
-// if (!process.env.OPENAI_API_KEY) {
-//   throw new Error('OPENAI_API_KEY environment variable is not set');
-// }
+// Load environment variables
+dotenv.config();
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+
 // Initialize OpenAI
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 // Middleware
@@ -58,7 +28,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get('/', (_req: Request, res: Response) => {
+app.get('/', function(_req: Request, res: Response) {
   res.send('Natural Language Task Manager API');
 });
 
